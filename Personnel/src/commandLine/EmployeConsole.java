@@ -27,8 +27,23 @@ public class EmployeConsole
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
+			menu.add(changeDateDebut(employe));
+			menu.add(changeDateFin(employe));
 			menu.addBack("q");
 			return menu;
+	}
+
+	private Option changeDateFin(Employe employe) {
+		
+		return new Option("Changer la date de fin", "f", () -> {employe.setDateFin(getString(" Nouvelle date de fin : "));});
+	}
+
+	private Option changeDateDebut(Employe employe) {
+		
+		return new Option("Changer la date de debut", "d", () -> {
+			System.out.println("Date actuel = " + employe.getDateDebut());
+			employe.setDateDebut(getString("Nouvelle date début : "));
+			});
 	}
 
 	private Option changerNom(final Employe employe)
