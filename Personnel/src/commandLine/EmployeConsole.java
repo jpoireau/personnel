@@ -33,19 +33,6 @@ public class EmployeConsole
 			return menu;
 	}
 
-	private Option changeDateFin(Employe employe) {
-		
-		return new Option("Changer la date de fin", "f", () -> {employe.setDateFin(getString(" Nouvelle date de fin : "));});
-	}
-
-	private Option changeDateDebut(Employe employe) {
-		
-		return new Option("Changer la date de debut", "d", () -> {
-			System.out.println("Date actuel = " + employe.getDateDebut());
-			employe.setDateDebut(getString("Nouvelle date début : "));
-			});
-	}
-
 	private Option changerNom(final Employe employe)
 	{
 		return new Option("Changer le nom", "n", 
@@ -68,5 +55,19 @@ public class EmployeConsole
 		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
 	}
 	
+	private Option changeDateDebut(Employe employe) {
+		
+		return new Option("Changer la date de debut", "d", () -> {
+			System.out.println("Date actuel = " + employe.getDateDebut());
+			employe.setDateDebut(getString("Nouvelle date début : "));
+			});
+	}
 
+	private Option changeDateFin(Employe employe) {
+		
+		return new Option("Changer la date de fin", "f", () -> {
+		System.out.println("Date actuel = " + employe.getDateFin());
+		employe.setDateFin(getString(" Nouvelle date de fin : "));
+		});
+	}
 }
