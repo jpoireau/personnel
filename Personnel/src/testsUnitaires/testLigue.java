@@ -100,4 +100,30 @@ class testLigue
 		assertEquals(this.gestionPersonnel.getRoot(), ligue.getAdministrateur());
 		
 	}
+	
+	@Test
+	void checkPassword() throws SauvegardeImpossible 
+	{
+		Ligue ligue = gestionPersonnel.addLigue(1, "Football");
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "pass", "", "");
+		assertTrue(employe.checkPassword("pass"));
+		assertFalse(employe.checkPassword("autrePass"));
+	}
+	
+	@Test
+	void estAdmin() throws SauvegardeImpossible 
+	{
+		Ligue ligue = gestionPersonnel.addLigue(1, "Football");
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "pass", "", "");
+		assertFalse(employe.estAdmin(ligue));
+		
+		ligue.setAdministrateur(employe);
+		assertTrue(employe.estAdmin(ligue));
+		
+		Ligue ligue1 = gestionPersonnel.addLigue(1, "Fléchette");
+		assertFalse(employe.estAdmin(ligue1));
+		
+	}
+	
+	
 }
