@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -13,11 +14,12 @@ import java.io.Serializable;
 public class Employe implements Serializable, Comparable<Employe>
 {
 	private static final long serialVersionUID = 4795721718037994734L;
-	private String nom, prenom, password, mail, dateDebut, dateFin;
+	private String nom, prenom, password, mail;
+	private LocalDate  dateDebut, dateFin;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, String DateDebut, String DateFin)
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -25,8 +27,8 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
-		this.dateDebut = DateDebut;
-		this.dateFin = DateFin;
+		/* this.dateDebut = DateDebut;
+		this.dateFin = DateFin; */
 		
 	}
 	
@@ -185,19 +187,21 @@ public class Employe implements Serializable, Comparable<Employe>
 		return res + ")";
 	}
 
-	public String getDateFin() {
+	public LocalDate getDateFin() {
 		return dateFin;
 	}
 
-	public void setDateFin(String dateFin) {
+	public void setDateFin(LocalDate dateFin) {
 		this.dateFin = dateFin;
 	}
 
-	public String getDateDebut() {
+	public LocalDate getDateDebut() {
 		return dateDebut;
 	}
 
-	public void setDateDebut(String dateDebut) {
+	public void setDateDebut(LocalDate dateDebut) {
 		this.dateDebut = dateDebut;
 	}
+
+	
 }

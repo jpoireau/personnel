@@ -2,6 +2,8 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
+
 import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
@@ -55,19 +57,33 @@ public class EmployeConsole
 		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
 	}
 	
-	private Option changeDateDebut(Employe employe) {
-		
-		return new Option("Changer la date de debut", "d", () -> {
-			System.out.println("Date actuel = " + employe.getDateDebut());
-			employe.setDateDebut(getString("Nouvelle date début : "));
-			});
+	private Option changeDateFin(final Employe employe) {
+		return new Option("Changer Date départ", "f", 
+				() -> {
+					try 
+					{
+						System.out.println("Date de départ actuel : " + employe.getDateFin());
+						employe.setDateFin((LocalDate)LocalDate.parse(getString("Nouvelle Date de départ : ")));
+					} catch (Exception e) 
+					{
+						System.out.println("il y a une erreur dans la saisie de la date veuillez recommencer");
+					}
+					}
+			);
 	}
 
-	private Option changeDateFin(Employe employe) {
-		
-		return new Option("Changer la date de fin", "f", () -> {
-		System.out.println("Date actuel = " + employe.getDateFin());
-		employe.setDateFin(getString(" Nouvelle date de fin : "));
-		});
+	private Option changeDateDebut(final Employe employe) {
+		return new Option("Modifier Date d'arrivée", "d", 
+				() -> {
+					try 
+					{
+						System.out.println("Ancienne date arrivée : " + employe.getDateDebut());
+						employe.setDateDebut((LocalDate)LocalDate.parse(getString("Date arrivée :")));
+					} catch (Exception e) 
+					{
+						System.out.println("Erreur dans la date que vous avez tapé, recommencez");
+					}
+					}
+			);
 	}
 }
