@@ -147,4 +147,14 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	{
 		return nom;
 	}
+	
+	public void setAdmin(){
+		
+	}
+	
+	public Employe getAdmin() {
+		return administrateur;
+		
+	}
+	
 }
