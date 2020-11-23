@@ -98,11 +98,21 @@ public class LigueConsole
 		return new Option("ajouter un employé", "a",
 				() -> 
 				{
-					ligue.addEmploye(getString("nom : "), 
-						getString("prenom : "), getString("mail : "), 
-						getString("password : "),
-						LocalDate.parse(getString("datedebut : ")),
-						LocalDate.parse(getString("datefin : ")));
+					try 
+					{
+						ligue.addEmploye(getString("nom : "), 
+								getString("prenom : "), getString("mail : "), 
+								getString("password : "),
+								LocalDate.parse(getString("datedebut (format (AAAA-MM-JJ) : ")),
+								LocalDate.parse(getString("datefin (format (AAAA-MM-JJ): ")));
+					}
+					catch(Exception e) 
+					{
+						System.out.println("Il y a une erreur dans la saisie de la date");
+					}
+					finally {
+						System.out.println("OK");
+					}
 				}
 		);
 	}
