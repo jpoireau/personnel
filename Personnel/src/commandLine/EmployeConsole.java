@@ -3,11 +3,14 @@ package commandLine;
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+import commandLineMenus.List;
 import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.Employe;
+import personnel.Ligue;
 
 public class EmployeConsole 
 {
@@ -31,6 +34,7 @@ public class EmployeConsole
 			menu.add(changerPassword(employe));
 			menu.add(changeDateDebut(employe));
 			menu.add(changeDateFin(employe));
+			//menu.add(supprimerEmploye(employe));
 			menu.addBack("q");
 			return menu;
 	}
@@ -58,32 +62,42 @@ public class EmployeConsole
 	}
 	
 	private Option changeDateFin(final Employe employe) {
-		return new Option("Changer Date départ", "f", 
+		return new Option("Modifier la date de départ", "f", 
 				() -> {
 					try 
 					{
-						System.out.println("Date de départ actuel : " + employe.getDateFin());
-						employe.setDateFin((LocalDate)LocalDate.parse(getString("Nouvelle Date de départ : ")));
+						System.out.println("Ancienne date de départ : " + employe.getDateFin());
+						employe.setDateFin((LocalDate)LocalDate.parse(getString("Entrez une nouvelle date de départ : ")));
+						System.out.println("Nouvelle date enregistrée avec succès ! ");
 					} catch (Exception e) 
 					{
-						System.out.println("il y a une erreur dans la saisie de la date veuillez recommencer");
+						System.out.println("Vous avez fait une erreur dans la saisie de la date, vérifiez le format (AAAA-MM-JJ) et réessayez !");
 					}
+					
 					}
-			);
-	}
+					
+			); 
+	} 
 
 	private Option changeDateDebut(final Employe employe) {
-		return new Option("Modifier Date d'arrivée", "d", 
+		return new Option("Modifier la date d'arrivée", "d", 
 				() -> {
 					try 
 					{
-						System.out.println("Ancienne date arrivée : " + employe.getDateDebut());
-						employe.setDateDebut((LocalDate)LocalDate.parse(getString("Date arrivée :")));
+						System.out.println("Ancienne date d'arrivée : " + employe.getDateDebut());
+						employe.setDateDebut((LocalDate)LocalDate.parse(getString("Entrez une nouvelle date d'arrivée :")));
+						System.out.println("Nouvelle date enregistrée avec succès ! ");
 					} catch (Exception e) 
 					{
-						System.out.println("Erreur dans la date que vous avez tapé, recommencez");
+						System.out.println("Vous avez fait une erreur dans la saisie de la date, vérifiez le format (AAAA-MM-JJ) et réessayez !");
 					}
 					}
 			);
 	}
+	/*private Option supprimerEmploye(final Employe employe)
+	{
+		return new Option("Supprimer l'empoyé", "s",
+				() -> {employe.setNom(getString("Nouveau nom : "));}		
+				);
+	}*/
 }

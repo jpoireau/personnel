@@ -1,6 +1,4 @@
 DROP TABLE IF EXISTS LIGUE;
-DROP TABLE IF EXISTS NIVEAU;
-DROP TABLE IF EXISTS DateDepart;
 DROP TABLE IF EXISTS EMPLOYE;
 
 CREATE TABLE LIGUE(
@@ -21,7 +19,9 @@ CREATE TABLE EMPLOYE(
    Simple_Employe TINYINT(1),
    Admin TINYINT(1),
    Super_Admin TINYINT(1), 
+   idLigue int,
    DateArrive DATE ,
    DateDepart DATE,
    constraint pk_EMPLOYE PRIMARY KEY(NumEmp)
+   constraint fk_EMPLOYE FOREIGN KEY(idLigue) references LIGUE(IdLigue)
    )ENGINE=INNODB;
