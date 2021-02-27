@@ -191,16 +191,22 @@ public class Employe implements Serializable, Comparable<Employe>
 		return dateFin;
 	}
 
-	public void setDateFin(LocalDate dateFin) {
-		this.dateFin = dateFin;
+	public void setDateFin(LocalDate dateFin) throws exceptionDateFin {
+		if (dateFin.isBefore(dateDebut))
+				throw new exceptionDateFin();
+		else
+				this.dateFin = dateFin;
 	}
 
 	public LocalDate getDateDebut() {
 		return dateDebut;
 	}
 
-	public void setDateDebut(LocalDate dateDebut) {
-		this.dateDebut = dateDebut;
+	public void setDateDebut(LocalDate dateDebut) throws exceptionDatedebut {
+		if (dateDebut.isAfter(dateFin))
+			throw new exceptionDatedebut();
+		else
+			this.dateDebut = dateDebut;
 	}
 
 	
