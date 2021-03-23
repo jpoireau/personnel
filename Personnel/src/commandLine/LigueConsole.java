@@ -38,7 +38,7 @@ public class LigueConsole
 
 	private Option afficher(final Ligue ligue)
 	{
-		return new Option("Afficher la ligue", "l", 
+		return new Option("Afficher la ligue", "w", 
 				() -> 
 				{
 					System.out.println(ligue);
@@ -48,7 +48,7 @@ public class LigueConsole
 	}
 	private Option afficherEmployes(final Ligue ligue)
 	{
-		return new Option("Afficher les employes", "l", () -> {System.out.println(ligue.getEmployes());});
+		return new Option("Afficher les employes", "m", () -> {System.out.println(ligue.getEmployes());});
 	}
 
 	private Option ajouterLigue()
@@ -124,7 +124,6 @@ public class LigueConsole
 		menu.add(ajouterEmploye(ligue));
 		menu.add(selectionnerEmploye(ligue));
 		//menu.add(modifierEmploye(ligue));
-		menu.add(changerAdministrateur(ligue));
 		//menu.add(supprimerEmploye(ligue));
 		menu.addBack("q");
 		return menu;
@@ -156,7 +155,7 @@ public class LigueConsole
 	
 	private List<Employe> changerAdministrateur(final Ligue ligue)
 	{
-		return new List<>("Changer d'administrateur", "c", 
+		return new List<>("Changer d'administrateur", "h", 
 				() -> new ArrayList<>(ligue.getEmployes()), 
 				(index, element) -> {ligue.setAdministrateur(element);}
 				);
