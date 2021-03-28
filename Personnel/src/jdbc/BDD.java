@@ -87,4 +87,10 @@ public class BDD implements Passerelle {
 		return 0;
 	}
 
+	@Override
+	public int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

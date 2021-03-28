@@ -87,9 +87,21 @@ public class LigueConsole
 	private Option changerNom(final Ligue ligue)
 	{
 		return new Option("Renommer", "r", 
-				() -> {ligue.setNom(getString("Nouveau nom : "));});
+				() -> {try 
+				{
+					ligue.setNom(getString("Nouveau nom ligue : "));
+				} 
+				catch (SauvegardeImpossible e) 
+				{
+					e.printStackTrace();
+				} 
+				catch (SQLException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}});
 	}
-
+	
 	private List<Ligue> selectionnerLigue()
 	{
 		return new List<Ligue>("Sélectionner une ligue", "e", 

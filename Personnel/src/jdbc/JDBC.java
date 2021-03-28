@@ -104,4 +104,17 @@ public class JDBC implements Passerelle
 		instruction.executeUpdate();
 		return -1;
 	}
+	
+	
+	
+	@Override
+	public int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException 
+	{
+		PreparedStatement instruction;
+		instruction = connection.prepareStatement("update ligue set nomLigue = ? where idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+		instruction.setString(1, ligue.getNom());
+		instruction.setInt(2, ligue.getId());
+		instruction.executeUpdate();
+		return -1;	
+	}
 }

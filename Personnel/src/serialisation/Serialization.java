@@ -58,4 +58,10 @@ public class Serialization implements personnel.Passerelle
 		
 		return -1;
 	}
+
+	@Override
+	public int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException {
+		// TODO Auto-generated method stub
+		return -1;
+	}
 }
