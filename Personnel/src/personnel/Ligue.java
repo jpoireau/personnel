@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
@@ -138,11 +139,14 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	/**
 	 * Supprime la ligue, entraîne la suppression de tous les employés
 	 * de la ligue.
+	 * @throws SQLException 
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void remove()
+	public void remove() throws SauvegardeImpossible, SQLException
 	{
 		GestionPersonnel.getGestionPersonnel().remove(this);
+		gestionPersonnel.deleteLigue(this);
 	}
 	
 
@@ -165,6 +169,15 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	public Employe getAdmin() {
 		return administrateur;
 		
+	}
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

@@ -2,6 +2,7 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -73,7 +74,12 @@ public class LigueConsole
 		menu.add(gererEmployes(ligue));
 		menu.add(changerAdministrateur(ligue));
 		menu.add(changerNom(ligue));
-		menu.add(supprimer(ligue));
+		try {
+			menu.add(supprimer(ligue));
+		} catch (SauvegardeImpossible | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		menu.addBack("q");
 		return menu;
 	}
@@ -161,9 +167,17 @@ public class LigueConsole
 				);
 	}		
 
-	private Option supprimer(Ligue ligue)
+	private Option supprimer(Ligue ligue) throws SauvegardeImpossible, SQLException
 	{
-		return new Option("Supprimer", "d", () -> {ligue.remove();});
+		return new Option("Supprimer", "d", () -> {try {
+			ligue.remove();
+		} catch (SauvegardeImpossible e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
 	}
 	
 }

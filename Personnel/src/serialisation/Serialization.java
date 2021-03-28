@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
 
 import personnel.GestionPersonnel;
 import personnel.Ligue;
@@ -48,6 +49,13 @@ public class Serialization implements personnel.Passerelle
 	@Override
 	public int insert(Ligue ligue) throws SauvegardeImpossible
 	{
+		return -1;
+	}
+
+	@Override
+	public int deleteLigue(Ligue ligue) throws SauvegardeImpossible, SQLException 
+	{
+		
 		return -1;
 	}
 }

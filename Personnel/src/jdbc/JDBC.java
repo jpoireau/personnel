@@ -87,4 +87,21 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(exception);
 		}		
 	}
+
+	@Override
+	public int deleteLigue(Ligue ligue) throws SauvegardeImpossible, SQLException 
+	{
+		if(ligue.getEmployes() != null && ligue.getEmployes().size() > 0)
+		{
+			PreparedStatement instruction;
+			instruction = connection.prepareStatement("delete from employe where ligue = ?", Statement.RETURN_GENERATED_KEYS);
+			instruction.setInt(1, ligue.getId());
+			instruction.executeUpdate();
+		}
+		PreparedStatement instruction;
+		instruction = connection.prepareStatement("delete from ligue where idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+		instruction.setInt(1, ligue.getId());
+		instruction.executeUpdate();
+		return -1;
+	}
 }

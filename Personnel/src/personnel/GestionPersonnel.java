@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -112,5 +113,10 @@ public class GestionPersonnel implements Serializable
 	public Employe getRoot()
 	{
 		return root;
+	}
+	
+	int deleteLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
+	{
+		return passerelle.deleteLigue(ligue);
 	}
 }
