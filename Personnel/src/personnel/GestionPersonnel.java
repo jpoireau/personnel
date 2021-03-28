@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.time.LocalDate;
 
 /**
  * Gestion du personnel. Un seul objet de cette classe existe.
@@ -21,7 +22,7 @@ public class GestionPersonnel implements Serializable
 	private static final long serialVersionUID = -105283113987886425L;
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
-	private Employe root = new Employe(this, null, "root", "", "", "toor");
+	private Employe root = new Employe(this, null, "root", "", "", "toor", null, null);
 	public final static int SERIALIZATION = 1, JDBC = 2, 
 			TYPE_PASSERELLE = JDBC;  
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
@@ -123,5 +124,9 @@ public class GestionPersonnel implements Serializable
 	int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
 	{
 		return passerelle.modifLigue(ligue);
+	}
+	int insertEmploye(Employe employe) throws SauvegardeImpossible, SQLException
+	{
+		return passerelle.insertEmploye(employe);
 	}
 }

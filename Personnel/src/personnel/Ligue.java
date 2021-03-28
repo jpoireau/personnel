@@ -111,13 +111,14 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param mail l'adresse mail de l'employé.
 	 * @param password le password de l'employé.
 	 * @return l'employé créé. 
+	 * @throws SauvegardeImpossible 
+	 * @throws SQLException 
 	 */
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateDebut, LocalDate dateFin)
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateDebut, LocalDate dateFin) throws SQLException, SauvegardeImpossible
 	{
 		
-		
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password);
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateDebut, dateFin);
 		try {
 			employe.setDateDebut(dateFin);
 		} catch (exceptionDatedebut e) {
