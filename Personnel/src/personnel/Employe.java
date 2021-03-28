@@ -27,8 +27,8 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
-		/* this.dateDebut = DateDebut;
-		this.dateFin = DateFin; */
+		/*this.dateDebut = dateDebut;
+		this.dateFin = dateFin; */
 		
 	}
 	
@@ -207,6 +207,10 @@ public class Employe implements Serializable, Comparable<Employe>
 			throw new exceptionDatedebut();
 		else
 			this.dateDebut = dateDebut;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	

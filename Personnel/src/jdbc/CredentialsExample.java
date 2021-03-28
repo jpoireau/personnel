@@ -6,7 +6,7 @@ public class CredentialsExample
 			driverClassName = "com.mysql.cj.jdbc.Driver",
 			host = "localhost", 
 			port ="3306",
-			database ="personnel",
+			database ="personnel2",
 			user = "root",
 			password = "",
 			TimeZone ="?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC";
