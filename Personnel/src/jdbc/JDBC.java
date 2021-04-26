@@ -54,13 +54,13 @@ public class JDBC implements Passerelle
 	public int insertEmploye(Employe employe) throws SauvegardeImpossible, SQLException 
 	{
 		PreparedStatement instruction;
-		instruction = connection.prepareStatement("insert into employe(nom,prenom,mail,password,dateDebut,dateFin,ligueID) values(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-		instruction.setString(1, employe.getNom());
-		instruction.setString(2, employe.getPrenom());
-		instruction.setString(5, employe.getMail());
-		instruction.setString(6, employe.getPassword());
-		instruction.setString(3, employe.getDateDebut().toString());
-		instruction.setString(4, employe.getDateFin().toString());
+		instruction = connection.prepareStatement("insert into employe(prenom,nom,password,mail,dateDebut,dateFin,idLigue) values(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		instruction.setString(1, employe.getPrenom());
+		instruction.setString(2, employe.getNom());
+		instruction.setString(3, employe.getPassword());
+		instruction.setString(4, employe.getMail());
+		instruction.setString(5, employe.getDateDebut().toString());
+		instruction.setString(6, employe.getDateFin().toString());
 		instruction.setInt(7, employe.getLigue().getId());
 		instruction.executeUpdate();
 		ResultSet id = instruction.getGeneratedKeys();
@@ -127,13 +127,20 @@ public class JDBC implements Passerelle
 	
 	
 	@Override
-	public int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException 
+	public int modifLigue(Ligue ligue) throws SauvegardeImpossible 
 	{
 		PreparedStatement instruction;
-		instruction = connection.prepareStatement("update ligue set nomLigue = ? where idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+		try{
+			instruction = connection.prepareStatement("update ligue set nomLigue = ? where idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+		
 		instruction.setString(1, ligue.getNom());
 		instruction.setInt(2, ligue.getId());
 		instruction.executeUpdate();
+		}
+		catch(SQLException e)  {
+			
+			throw new SauvegardeImpossible(e);
+		}
 		return -1;	
 	}
 }

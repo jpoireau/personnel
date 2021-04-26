@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import personnel.Employe;
 import personnel.GestionPersonnel;
 import personnel.Ligue;
 import personnel.Passerelle;
@@ -88,7 +89,13 @@ public class BDD implements Passerelle {
 	}
 
 	@Override
-	public int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException {
+	public int modifLigue(Ligue ligue) throws SauvegardeImpossible {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int insertEmploye(Employe employe) throws SauvegardeImpossible, SQLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

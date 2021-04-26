@@ -67,7 +67,7 @@ public class LigueConsole
 		});
 	}
 	
-	private Menu editerLigue(Ligue ligue)
+	private Menu editerLigue(Ligue ligue) throws SQLException
 	{
 		Menu menu = new Menu("Editer " + ligue.getNom());
 		menu.add(afficher(ligue));
@@ -76,7 +76,7 @@ public class LigueConsole
 		menu.add(changerNom(ligue));
 		try {
 			menu.add(supprimer(ligue));
-		} catch (SauvegardeImpossible | SQLException e) {
+		} catch (SauvegardeImpossible e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -84,7 +84,7 @@ public class LigueConsole
 		return menu;
 	}
 
-	private Option changerNom(final Ligue ligue)
+	private Option changerNom(final Ligue ligue) throws SQLException
 	{
 		return new Option("Renommer", "r", 
 				() -> {try 
@@ -94,11 +94,6 @@ public class LigueConsole
 				catch (SauvegardeImpossible e) 
 				{
 					e.printStackTrace();
-				} 
-				catch (SQLException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}});
 	}
 	
@@ -106,7 +101,15 @@ public class LigueConsole
 	{
 		return new List<Ligue>("Sélectionner une ligue", "e", 
 				() -> new ArrayList<>(gestionPersonnel.getLigues()),
-				(element) -> editerLigue(element)
+				(element) -> {
+					try {
+						return editerLigue(element);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
 				);
 	}
 	

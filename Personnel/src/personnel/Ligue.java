@@ -61,7 +61,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @throws SauvegardeImpossible 
 	 */
 
-	public void setNom(String nom) throws SauvegardeImpossible, SQLException
+	public void setNom(String nom) throws SauvegardeImpossible
 	{
 		this.nom = nom;
 		int id = gestionPersonnel.modifLigue(this);

@@ -120,7 +120,7 @@ public class GestionPersonnel implements Serializable
 		return passerelle.deleteLigue(ligue);
 	}
 	
-	int modifLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
+	int modifLigue(Ligue ligue) throws SauvegardeImpossible
 	{
 		return passerelle.modifLigue(ligue);
 	}
