@@ -2,6 +2,7 @@ package personnel;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -21,34 +22,50 @@ public class GestionPersonnel implements Serializable
 	private static final long serialVersionUID = -105283113987886425L;
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
-	private Employe root = new Employe(this, null, "root", "", "", "toor");
+	private Employe root ;
 	public final static int SERIALIZATION = 1, JDBC = 2, 
-			TYPE_PASSERELLE = JDBC;  
+			TYPE_PASSERELLE = JDBC; 
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
 	
 	/**
 	 * Retourne l'unique instance de cette classe.
 	 * Crée cet objet s'il n'existe déjà.
 	 * @return l'unique objet de type {@link GestionPersonnel}.
+	 * @throws SQLException 
+	 * @throws SauvegardeImpossible 
 	 */
 	
 	public static GestionPersonnel getGestionPersonnel()
 	{
 		if (gestionPersonnel == null)
 		{
-			gestionPersonnel = passerelle.getGestionPersonnel();
+			try {
+				gestionPersonnel = passerelle.getGestionPersonnel();
+			} catch (SauvegardeImpossible e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (gestionPersonnel == null)
-				gestionPersonnel = new GestionPersonnel();
+				try {
+					gestionPersonnel = new GestionPersonnel();
+				} catch (SauvegardeImpossible | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		return gestionPersonnel;
 	}
 
-	public GestionPersonnel()
+	public GestionPersonnel() throws SauvegardeImpossible, SQLException
 	{
 		if (gestionPersonnel != null)
 			throw new RuntimeException("Vous ne pouvez créer qu'une seuls instance de cet objet.");
 		ligues = new TreeSet<>();
 		gestionPersonnel = this;
+		root= new Employe(this, null, "root", "", "", "toor",null,null);
 	}
 	
 	public void sauvegarder() throws SauvegardeImpossible
@@ -81,7 +98,7 @@ public class GestionPersonnel implements Serializable
 		return Collections.unmodifiableSortedSet(ligues);
 	}
 
-	public Ligue addLigue(String nom) throws SauvegardeImpossible
+	public Ligue addLigue(String nom) throws SauvegardeImpossible, SQLException
 	{
 		Ligue ligue = new Ligue(this, nom); 
 		ligues.add(ligue);
@@ -95,17 +112,52 @@ public class GestionPersonnel implements Serializable
 		return ligue;
 	}
 
-	void remove(Ligue ligue)
+	public void remove(Ligue ligue)
 	{
 		ligues.remove(ligue);
 	}
 	
-	int insert(Ligue ligue) throws SauvegardeImpossible
+	public boolean hasLigue(Ligue ligue)
+	{
+		return ligues.contains(ligue);
+	}
+	
+	int insert(Ligue ligue) throws SauvegardeImpossible, SQLException
 	{
 		return passerelle.insert(ligue);
 	}
-
-	/**
+	
+	void updateLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
+	{
+		passerelle.updateLigue(ligue);
+	}
+	
+	int insertEmploye(Employe employe) throws SauvegardeImpossible, SQLException
+	{
+		return passerelle.insertEmploye(employe);
+	}
+	
+	void updateEmploye(Employe employe) throws SauvegardeImpossible, SQLException
+	{
+		passerelle.updateEmploye(employe);
+	}
+	
+	void changerAdmin(Employe employe) throws SauvegardeImpossible, SQLException
+	{
+		passerelle.changerAdmin(employe);
+	}
+	
+	void deleteEmploye(Employe employe) throws SauvegardeImpossible, SQLException
+	{
+		passerelle.deleteEmploye(employe);
+	}
+	
+	void deleteLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
+	{
+		passerelle.deleteLigue(ligue);
+	}
+	
+	/** 
 	 * Retourne le root (super-utilisateur).
 	 * @return le root.
 	 */
@@ -115,13 +167,4 @@ public class GestionPersonnel implements Serializable
 		return root;
 	}
 	
-	int deleteLigue(Ligue ligue) throws SauvegardeImpossible, SQLException
-	{
-		return passerelle.deleteLigue(ligue);
-	}
-	
-	int modifLigue(Ligue ligue) throws SauvegardeImpossible
-	{
-		return passerelle.modifLigue(ligue);
-	}
 }

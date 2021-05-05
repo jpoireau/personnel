@@ -2,21 +2,22 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
-import commandLineMenus.List;
 import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.Employe;
-import personnel.Ligue;
+import personnel.ErreurDateDepart;
+import personnel.ErreurDateFin;
+import personnel.SauvegardeImpossible;
 
 public class EmployeConsole 
 {
 	private Option afficher(final Employe employe)
 	{
-		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe);});
+		return new Option("Afficher l'employÃ©", "l", () -> {System.out.println(employe);});
 	}
 
 	ListOption<Employe> editerEmploye()
@@ -26,78 +27,128 @@ public class EmployeConsole
 
 	Option editerEmploye(Employe employe)
 	{
-			Menu menu = new Menu("Gérer le compte " + employe.getNom(), "c");
+			Menu menu = new Menu("GÃ©rer le compte " + employe.getNom(), "c");
 			menu.add(afficher(employe));
 			menu.add(changerNom(employe));
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
-			menu.add(changeDateDebut(employe));
+			menu.add(changerDateDebut(employe));
 			menu.add(changeDateFin(employe));
-			//menu.add(supprimerEmploye(employe));
+			menu.add(SupprimerEmploye(employe));
 			menu.addBack("q");
 			return menu;
+	}
+	
+	private Option SupprimerEmploye(final Employe employe)
+	{
+		return new Option("Supprimer un employe", "s", () -> {
+			try {
+				employe.remove();
+			} catch (Exception e) {
+				System.out.println("Impossible de supprimer l'employe");
+			}
+			
+			});
+	}
+
+	private Option changeDateFin(final Employe employe) {
+		return new Option("Changer Date dÃ©part", "f", 
+				() -> {
+					try {
+						try {
+							System.out.println("Date de dÃ©part actuel : " + employe.getDateFin());
+							employe.setDateFin((LocalDate)LocalDate.parse(getString("Nouvelle Date de dÃ©part : ")));
+						}catch (ErreurDateFin f)
+						{
+							System.out.println(f);
+						}
+					} catch (Exception e) {
+						System.out.println("erreur de format dans l'insertion de la date");
+					}
+				}
+			);
+	}
+
+	private Option changerDateDebut(final Employe employe) {
+		return new Option("Changer Date d'arrivÃ©e", "d", 
+				() -> {
+					try {
+						try {
+							System.out.println("Date d'arrivÃ©e actuel : " + employe.getDateDebut());
+							employe.setDateDebut((LocalDate)LocalDate.parse(getString("Nouvelle Date d'arrivÃ©e :")));
+						} catch (ErreurDateDepart e) {
+							System.out.println(e);
+						}
+					} catch (Exception e) {
+						System.out.println("erreur de format dans l'insertion de la date");
+					}
+				}
+			);
 	}
 
 	private Option changerNom(final Employe employe)
 	{
 		return new Option("Changer le nom", "n", 
-				() -> {employe.setNom(getString("Nouveau nom : "));}
+				() -> {
+					System.out.println("Nom actuel : " + employe.getNom());
+					try {
+						employe.setNom(getString("Nouveau nom : "));
+					} catch (SauvegardeImpossible e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
 			);
 	}
 	
 	private Option changerPrenom(final Employe employe)
 	{
-		return new Option("Changer le prénom", "p", () -> {employe.setPrenom(getString("Nouveau prénom : "));});
+		return new Option("Changer le prÃ©nom", "p", () -> {
+			System.out.println("PrÃ©nom actuel : " + employe.getPrenom());
+			try {
+				employe.setPrenom(getString("Nouveau prÃ©nom : "));
+			} catch (SauvegardeImpossible e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			});
 	}
 	
 	private Option changerMail(final Employe employe)
 	{
-		return new Option("Changer le mail", "e", () -> {employe.setMail(getString("Nouveau mail : "));});
+		return new Option("Changer le mail", "e", () -> {
+			System.out.println("Mail actuel : " + employe.getMail());
+			try {
+				employe.setMail(getString("Nouveau mail : "));
+			} catch (SauvegardeImpossible e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			});
 	}
 	
 	private Option changerPassword(final Employe employe)
 	{
-		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
+		return new Option("Changer le password", "x", () -> {try {
+			employe.setPassword(getString("Nouveau password : "));
+		} catch (SauvegardeImpossible e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
 	}
 	
-	private Option changeDateFin(final Employe employe) {
-		return new Option("Modifier la date de départ", "f", 
-				() -> {
-					try 
-					{
-						System.out.println("Ancienne date de départ : " + employe.getDateFin());
-						employe.setDateFin((LocalDate)LocalDate.parse(getString("Entrez une nouvelle date de départ : ")));
-						System.out.println("Nouvelle date enregistrée avec succès ! ");
-					} catch (Exception e) 
-					{
-						System.out.println("Vous avez fait une erreur dans la saisie de la date, vérifiez le format (AAAA-MM-JJ) et réessayez !");
-					}
-					
-					}
-					
-			); 
-	} 
 
-	private Option changeDateDebut(final Employe employe) {
-		return new Option("Modifier la date d'arrivée", "d", 
-				() -> {
-					try 
-					{
-						System.out.println("Ancienne date d'arrivée : " + employe.getDateDebut());
-						employe.setDateDebut((LocalDate)LocalDate.parse(getString("Entrez une nouvelle date d'arrivée :")));
-						System.out.println("Nouvelle date enregistrée avec succès ! ");
-					} catch (Exception e) 
-					{
-						System.out.println("Vous avez fait une erreur dans la saisie de la date, vérifiez le format (AAAA-MM-JJ) et réessayez !");
-					}
-					}
-			);
-	}
-	/*private Option supprimerEmploye(final Employe employe)
-	{
-		return new Option("Supprimer l'empoyé", "s",
-				() -> {employe.setNom(getString("Nouveau nom : "));}		
-				);
-	}*/
 }

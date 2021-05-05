@@ -1,129 +1,126 @@
 package testsUnitaires;
 
+import static commandLineMenus.rendering.examples.util.InOut.getString;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
+import jdbc.JDBC;
 import personnel.*;
 
 class testLigue 
 {
 	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+	JDBC jdbc = new JDBC();
 	
 	@Test
-	void createLigue() throws SauvegardeImpossible
+	void createLigue() throws SauvegardeImpossible, SQLException
 	{
-		Ligue ligue = gestionPersonnel.addLigue("FlÈchettes");
-		assertEquals("FlÈchettes", ligue.getNom());
-		
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue;
+		ligue = gestionPersonnel.addLigue("Fl√©chettes");
+		String requete = "Select nomLigue from ligue where idLigue = "+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+			assertEquals(req.getString(1), ligue.getNom());
+		}
+	}
+	
+	@Test
+	void delLigue() throws SauvegardeImpossible, SQLException
+	{
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue = gestionPersonnel.addLigue("testultime");
+		ligue.remove();
+		String requete = "Select nomLigue from ligue where idLigue ="+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+		assertEquals(req.getString(1),null);
+	} 
+	}
+	
+	@Test
+	void modifLigue() throws SauvegardeImpossible, SQLException 
+	{
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue = gestionPersonnel.addLigue("Fl√©chettes");
+		ligue.setNom("Flech");
+		String requete = "Select nomLigue from ligue where idLigue = "+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+		assertEquals("Flech", ligue.getNom()); }
 	}
 
-	
 	@Test
-	void addLigue() throws SauvegardeImpossible 
+	void addEmploye() throws SauvegardeImpossible, ErreurDateDepart, ErreurDateFin, SQLException
 	{
-		Ligue ligue = gestionPersonnel.addLigue("Vicoudou");
-		assertEquals("Vicoudou", ligue.getNom());
-		assertTrue(gestionPersonnel.getLigues().contains(ligue));
-		
+		String result = null;
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue = gestionPersonnel.addLigue("Fl√©chettes");
+		Employe employe = ligue.addEmploye("Bouchard", "G√©rard", "g.bouchard@gmail.com", LocalDate.parse("2020-09-09"), LocalDate.parse("2030-06-06"), "azerty"); 
+		String Employer = employe.toString();
+		String requete = "Select nomE, prenomE, mailE, DateDebut, DateFin, passwordE, nomLigue from employe, ligue where ligue = idLigue and ligue = "+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+			result = req.getString(1) + " " + req.getString(2) + " " + req.getString(3) + " " + req.getString(4) + " " + req.getString(5) + " " + req.getString(6) + " " + "(" + req.getString(7) + ")";
+		}
+		assertEquals(result, Employer);
 	}
 	
 	@Test
-	void getLigue() throws SauvegardeImpossible 
+	void delEmploye() throws SauvegardeImpossible, ErreurDateDepart, ErreurDateFin, SQLException 
 	{
-		Ligue ligue = gestionPersonnel.addLigue("Football");
-		Employe admin = ligue.addEmploye("Admin","Gertrude","A.Gertrude@gmail.com","pass",null, null);
-		ligue.setAdministrateur(admin);
-		
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null);
-		
-		Ligue ligueAdmin = gestionPersonnel.getLigue(admin);
-		assertNotNull(ligueAdmin);
-		assertEquals(ligue, ligueAdmin);
-		
-		ligueAdmin = gestionPersonnel.getLigue(employe);
-		assertNull(ligueAdmin);
-	}
-/*	
-	@Test
-	void removeLigues() throws SauvegardeImpossible 
-	{
-		Ligue ligue = gestionPersonnel.addLigue("Football");
-		assertEquals("Football", ligue.getNom());
-		ligue.remove();
-		assertTrue(gestionPersonnel.getLigues().isEmpty());
-	}
-*/	
-	@Test
-	void setAdmin() throws SauvegardeImpossible 
-	{
-		Ligue ligue = gestionPersonnel.addLigue("Football");
-		Ligue ligue1 = gestionPersonnel.addLigue("FlÈchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null);
-		assertThrows(DroitsInsuffisants.class, () -> {
-			ligue1.setAdministrateur(employe);
-		});
-	}
-	
-	
-	
-	@Test
-	void addEmploye() throws SauvegardeImpossible
-	{
-		Ligue ligue = gestionPersonnel.addLigue("FlÈchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null); 
-		assertEquals(employe, ligue.getEmployes().first()); 
-		Ligue ligue1 = gestionPersonnel.addLigue("SERPENTAR");
-		Employe employe1 = ligue1.addEmploye("arun", "gangsta", "arun.gangsta@gmail.com", "pass", null, null);
-		assertEquals(employe1, ligue1.getEmployes().first());
-	}
-	
-	@Test
-	void removeEmployeRoot() throws SauvegardeImpossible 
-	{
-		Employe root = gestionPersonnel.getRoot();
-		assertThrows(ImpossibleDeSupprimerRoot.class, () -> {
-			root.remove();
-		});
-	}
-	
-	@Test
-	void removeEmploye() throws SauvegardeImpossible 
-	{
-		Ligue ligue = gestionPersonnel.addLigue(1, "Football");
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null);
-		assertTrue(ligue.getEmployes().contains(employe));
-		ligue.setAdministrateur(employe);
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue = gestionPersonnel.addLigue("Fl√©chettes");
+		Employe employe = ligue.addEmploye("Bouchard", "G√©rard", "g.bouchard@gmail.com", LocalDate.parse("2020-01-08"), LocalDate.parse("2021-06-06"), "azerty"); 
 		employe.remove();
-		assertFalse(ligue.getEmployes().contains(employe));
-		assertEquals(this.gestionPersonnel.getRoot(), ligue.getAdministrateur());
-		
+		String requete = "Select idEmploye from employe where ligue = "+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+			assertEquals(req.getString(1),null);
+		}
 	}
 	
 	@Test
-	void checkPassword() throws SauvegardeImpossible 
+	void modifEmploye() throws SauvegardeImpossible, ErreurDateDepart, ErreurDateFin, SQLException 
 	{
-		Ligue ligue = gestionPersonnel.addLigue(1, "Football");
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null);
-		assertTrue(employe.checkPassword("pass"));
-		assertFalse(employe.checkPassword("autrePass"));
+		String result = null;
+		Statement instruction = jdbc.getConnection().createStatement();
+		Ligue ligue = gestionPersonnel.addLigue("Fl√©chettes");
+		Employe employe = ligue.addEmploye("Bouchard", "G√©rard", "g.bouchard@gmail.com", LocalDate.parse("2010-09-09"), LocalDate.parse("2020-10-01"), "azerty"); 
+		employe.setNom("Bouchard2");
+		employe.setPrenom("G√©rard2");
+		employe.setMail("richard@35.com");
+		employe.setDateDebut(LocalDate.parse("2002-02-02"));
+		employe.setPassword("qwerty");
+		String Employer = employe.toString();
+		String requete = "Select nomE, prenomE, mailE, DateDebut, DateFin, passwordE, nomLigue from employe, ligue where employe.ligue = ligue.idLigue and ligue = "+ ligue.getId();
+		ResultSet req = instruction.executeQuery(requete);
+		while (req.next()) {
+			result = req.getString(1) + " " + req.getString(2) + " " + req.getString(3) + " " + req.getString(4) + " " + req.getString(5) + " " + req.getString(6) + " " + "(" + req.getString(7) + ")";
+		}
+		assertEquals(result, Employer);
 	}
 	
 	@Test
-	void estAdmin() throws SauvegardeImpossible 
+	void changeAdmin() throws SauvegardeImpossible, ErreurDateDepart, ErreurDateFin, SQLException
 	{
-		Ligue ligue = gestionPersonnel.addLigue(1, "Football");
-		Employe employe = ligue.addEmploye("Bouchard", "GÈrard", "g.bouchard@gmail.com", "pass", null, null);
-		assertFalse(employe.estAdmin(ligue));
-		
+		Ligue ligue = gestionPersonnel.addLigue("Flechettes");
+		Employe employe = ligue.addEmploye("Bouchard", "G√©rard", "g.bouchard@gmail.com",LocalDate.parse("2010-09-09"), LocalDate.parse("2020-10-01"), "azerty");
 		ligue.setAdministrateur(employe);
-		assertTrue(employe.estAdmin(ligue));
-		
-		Ligue ligue1 = gestionPersonnel.addLigue(1, "FlÈchette");
-		assertFalse(employe.estAdmin(ligue1));
-		
+		String result = null;
+		Statement instruction = jdbc.getConnection().createStatement();
+		String requete = "Select * from employe, ligue where estAdmin = 1 and ligue = idLigue and ligue = " + employe.getLigue().getId();
+		ResultSet res = instruction.executeQuery(requete);
+		while(res.next())
+			result = res.getString(2) + " " + res.getString(3) + " " + res.getString(6) + " " + res.getString(4) + " " + res.getString(5) + " " + res.getString(7) + " " + "(" + res.getString(11) + ")";
+		assertEquals(result,ligue.getAdministrateur().toString());
 	}
-	
-	
+
+
 }
