@@ -38,17 +38,117 @@ public class PersonnelConsole extends JFrame
 	private GestionPersonnel gestionPersonnel;
 	LigueConsole ligueConsole;
 	EmployeConsole employeConsole;
-	
+	private Box ligneTitre = Box.createHorizontalBox();
+	private Box ligneUsername = Box.createHorizontalBox();
+	private Box ligneMotDePasse = Box.createHorizontalBox();
+	private Box ligneConfirmer = Box.createHorizontalBox();
+	private Box ligneErreurConnexion = Box.createHorizontalBox();
+	private Box colonne= Box.createVerticalBox();
+	private JButton confirmer = new JButton("Confirmer");
+	private JTextField username = new JTextField();
+	private JPasswordField motDePasse = new JPasswordField();
+	private JLabel erreurConnexion = new JLabel("Mot de passe saisie et/ou mail inconnu");
 	
 	public PersonnelConsole(GestionPersonnel gestionPersonnel) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, SauvegardeImpossible, SQLException
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.employeConsole = new EmployeConsole();
-		
-		ligueConsole = new LigueConsole(gestionPersonnel, employeConsole);
-							
+		this.setTitle("Personnel accueil");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setBackground(Color.WHITE);
+		this.setLocationRelativeTo(null);
+		setLookComponent(confirmer);
+		setLookComponent(username);
+		setLookComponent(motDePasse);
+		setLookComponent(erreurConnexion);
+		ligneTitre.add(new JLabel("Bienvenue sur personnel "));
+		ligneUsername.add(new JLabel("Adresse mail :"));
+		username.setMinimumSize(new Dimension(150,25));
+		username.setMaximumSize(new Dimension(150,25));
+		ligneUsername.add(username);
+		ligneMotDePasse.add(new JLabel("Password :"));
+		motDePasse.setMinimumSize(new Dimension(150,25));
+		motDePasse.setMaximumSize(new Dimension(150,25));
+		ligneMotDePasse.add(motDePasse);
+		confirmer.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				for(Ligue ligue: GestionPersonnel.getGestionPersonnel().getLigues())	
+				{
+					
+					if(ligue.getAdministrateur().getMail().equals(username.getText().trim()) && ligue.getAdministrateur().getPassword().equals(motDePasse.getText().trim()))
+					{
+						LigueConsole ligueConsole;
+						try {
+							ligueConsole = new LigueConsole(gestionPersonnel, employeConsole,ligue.getAdministrateur());
+							colonne.removeAll();
+							colonne.add(ligueConsole.getColonne());
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				if(GestionPersonnel.getGestionPersonnel().getRoot().getNom().equals(username.getText().trim()) && GestionPersonnel.getGestionPersonnel().getRoot().getPassword().equals(motDePasse.getText().trim()))
+				{
+					LigueConsole ligueConsole;
+					try {
+						if(erreurConnexion.isVisible())
+							erreurConnexion.setVisible(false);
+						ligueConsole = new LigueConsole(gestionPersonnel, employeConsole,gestionPersonnel.getRoot());
+						colonne.removeAll();
+						colonne.add(ligueConsole.getColonne());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else {
+					erreurConnexion.setVisible(true);
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		ligneConfirmer.add(confirmer);
+		erreurConnexion.setVisible(false);
+		ligneErreurConnexion.add(erreurConnexion);
+		colonne.add(ligneTitre);
+		colonne.add(ligneUsername);
+		colonne.add(ligneMotDePasse);
+		colonne.add(ligneConfirmer);
+		colonne.add(erreurConnexion);
+		this.getContentPane().add(colonne);
+		this.setSize(700,400);
+		this.setResizable(false);
+		this.setVisible(true);
 	}
 	
+	public void setLookComponent(Component component) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
+	{
+		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		SwingUtilities.updateComponentTreeUI(component);
+	}
 	
 	public void start()
 	{
@@ -65,14 +165,14 @@ public class PersonnelConsole extends JFrame
 		return menu;
 	}
 
-	private Menu menuQuitter()
-	{
-		Menu menu = new Menu("Quitter", "q");
-		menu.add(quitterEtEnregistrer());
-		menu.add(quitterSansEnregistrer());
-		menu.addBack("r");
-		return menu;
-	}
+//	private Menu menuQuitter()
+//	{
+//		Menu menu = new Menu("Quitter", "q");
+//		menu.add(quitterEtEnregistrer());
+//		menu.add(quitterSansEnregistrer());
+//		menu.addBack("r");
+//		return menu;
+//	}
 	
 	private Option quitterEtEnregistrer()
 	{
@@ -106,13 +206,18 @@ public class PersonnelConsole extends JFrame
 		return ok;
 	}
 	
-	public static void main(String[] args) throws SauvegardeImpossible, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException 
+	public static void main(String[] args) throws SauvegardeImpossible, SQLException 
 	{
-	
+		try {
+			PersonnelConsole fenetre = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//JFrame fenetreLigue = new LigueConsole(GestionPersonnel.getGestionPersonnel());
 		PersonnelConsole personnelConsole;
-		personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
-		if (personnelConsole.verifiePassword())
-			personnelConsole.start();
+//		personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
+//		if (personnelConsole.verifiePassword())
+//			personnelConsole.start();
 	}
 	
 }

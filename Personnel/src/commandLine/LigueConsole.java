@@ -38,21 +38,112 @@ public class LigueConsole extends JFrame
 {
 	private GestionPersonnel gestionPersonnel;
 	private EmployeConsole employeConsole;
-	
-	
+	private JPanel ligneLigue = new JPanel();
+	private JPanel ligneTableau= new JPanel();
+	private JPanel ligneAjoutEmploye = new JPanel();
+	private JPanel colonne= new JPanel();
+	private JButton ajoutEmploye = new JButton("Ajouter un employe");
+	private JTable tableau;
+	private JTextField nomLigue = new JTextField();
+	private JButton modifierNomLigue = new JButton("Modifier le nom de la ligue");
+	private JButton modifierEmploye = new JButton("Modifier l'employe");
 
-	public LigueConsole(GestionPersonnel gestionPersonnel, EmployeConsole employeConsole) throws SauvegardeImpossible, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
+	public LigueConsole(GestionPersonnel gestionPersonnel, EmployeConsole employeConsole, Employe admin) throws SauvegardeImpossible, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.employeConsole = employeConsole;
-		
-		
+		setLookComponent(nomLigue);
+		setLookComponent(modifierEmploye);
+		setLookComponent(modifierNomLigue);
+		setLookComponent(ajoutEmploye);
+		ligneLigue.setLayout(new BoxLayout(ligneLigue, BoxLayout.LINE_AXIS));
+		ligneTableau.setLayout(new BoxLayout(ligneTableau, BoxLayout.LINE_AXIS));
+		ligneAjoutEmploye.setLayout(new BoxLayout(ligneAjoutEmploye, BoxLayout.LINE_AXIS));
+		colonne.setLayout(new BoxLayout(colonne, BoxLayout.PAGE_AXIS));
+		if(admin != null)
+		{
+			if(admin.estRoot())
+			{
+				JPanel ligneTableauEnTete = new JPanel();
+				ligneTableauEnTete.setLayout(new BoxLayout(ligneTableauEnTete, BoxLayout.LINE_AXIS));
+				JLabel lesLigues = new JLabel("Le tableau des ligues");
+				ligneLigue.add(lesLigues);
+				String colonnes[] = {"Nom ligue", "Voir ligue", "Supprimer ligue"};
+				Object[][] donnees = {};
+				DefaultTableModel ligneTable = new DefaultTableModel(donnees, colonnes);
+				for(Ligue ligues : gestionPersonnel.getLigues())
+				{
+					ligneTable.addRow(new Object[] {ligues.getNom(), new JButton("Voir "+ ligues.getNom()) ,new JButton("Supprimer " + ligues.getNom()) });
+				}
+				tableau= new JTable(ligneTable);
+				tableau.getColumn("Voir ligue").setCellRenderer(new TableComponent());
+				tableau.getColumn("Supprimer ligue").setCellRenderer(new TableComponent());
+				tableau.getColumn("Supprimer ligue").setCellEditor(new BoutonSupprimerLigue(new JCheckBox()));
+				ligneTableauEnTete.add(tableau.getTableHeader());
+				tableau.setVisible(true);
+				ligneTableau.add(tableau);
+				colonne.add(ligneLigue);
+				colonne.add(ligneTableauEnTete);
+				colonne.add(ligneTableau);
 			}
+			else
+			{
+				nomLigue.setText(gestionPersonnel.getLigue(admin).getNom());
+				modifierNomLigue.setVisible(true);
+				modifierNomLigue.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						int erreurNomLigueExistant = 0;
+						JOptionPane fenetreSaisieNomLigue = new JOptionPane();
+						String nouveauNomLigue = fenetreSaisieNomLigue.showInputDialog(null,"Veuillez saisir un nouveau de ligue :","Nouveau nom ligue pour " + nomLigue.getText(),JOptionPane.QUESTION_MESSAGE).toString();
+						for(Ligue nomLigueExistant : gestionPersonnel.getLigues())
+						{
+							if(nomLigueExistant.getNom().equals(nouveauNomLigue) || nouveauNomLigue.length() < 1)
+								erreurNomLigueExistant ++;
+						}
+						if(erreurNomLigueExistant > 0) {
+							JOptionPane fenetreErreurSaisieNomLigue = new JOptionPane();
+							fenetreErreurSaisieNomLigue.showMessageDialog(null, "Erreur saisie Ligue","Le nom de ligue saisie est incorrecte ou dÈj‡ existant.", JOptionPane.ERROR_MESSAGE);
+						}
+						else
+						{
+							try {
+								admin.getLigue().setNom(nouveauNomLigue);
+							} catch (SauvegardeImpossible e) {
+								e.printStackTrace();
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+							JOptionPane fenetreSaisieNomLigueCorrecte = new JOptionPane();
+							fenetreSaisieNomLigueCorrecte.showMessageDialog(null,"Nom ligue changÈ", "Le nouveau nom de la ligue est : " + nouveauNomLigue, JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				});
+				ligneLigue.add(nomLigue);
+				ligneLigue.add(modifierNomLigue);
+				colonne.add(ligneLigue);
+				
+			}
+			this.getContentPane().add(colonne);
+			this.setSize(700,400);
+			this.setVisible(false);
+		}
+	}
 
+	public void setLookComponent(Component component) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException
+	{
+		UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		SwingUtilities.updateComponentTreeUI(component);
+	}
+
+	public Component getColonne() {
+		return colonne;
+	}
 	
 	Menu menuLigues()
 	{
-		Menu menu = new Menu("G√©rer les ligues", "l");
+		Menu menu = new Menu("GÈrer les ligues", "l");
 		menu.add(afficherLigues());
 		menu.add(ajouterLigue());
 		menu.add(selectionnerLigue());
@@ -71,7 +162,7 @@ public class LigueConsole extends JFrame
 				() -> 
 				{
 					System.out.println(ligue);
-					System.out.println("administr√©e par " + ligue.getAdministrateur());
+					System.out.println("administrÈe par " + ligue.getAdministrateur());
 				}
 		);
 	}
@@ -124,7 +215,7 @@ public class LigueConsole extends JFrame
 
 	private List<Ligue> selectionnerLigue()
 	{
-		return new List<Ligue>("S√©lectionner une ligue", "e", 
+		return new List<Ligue>("SÈlectionner une ligue", "e", 
 				() -> new ArrayList<>(gestionPersonnel.getLigues()),
 				(element) -> editerLigue(element)
 				);
@@ -132,14 +223,14 @@ public class LigueConsole extends JFrame
 	
 	private Option ajouterEmploye(final Ligue ligue)
 	{
-		return new Option("ajouter un employ√©", "a",
+		return new Option("ajouter un employÈ", "a",
 				() -> 
 				{
 					try {
 						ligue.addEmploye(getString("nom : "), 
 								getString("prenom : "), getString("mail : "), 
-								LocalDate.parse(getString("date d'arriv√©  (AAAA-MM-JJ) : ")), 
-								LocalDate.parse(getString("date de d√©part (AAAA-MM-JJ) : ")), getString("password : "));
+								LocalDate.parse(getString("date d'arrivÈ  (AAAA-MM-JJ) : ")), 
+								LocalDate.parse(getString("date de dÈpart (AAAA-MM-JJ) : ")), getString("password : "));
 					} 
 					catch (Exception e) {
 						System.out.println("erreur de format dans l'insertion de la date");
@@ -151,7 +242,7 @@ public class LigueConsole extends JFrame
 	
 	private Menu gererEmployes(Ligue ligue)
 	{
-		Menu menu = new Menu("G√©rer les employ√©s de " + ligue.getNom(), "e");
+		Menu menu = new Menu("GÈrer les employÈs de " + ligue.getNom(), "e");
 		menu.add(afficherEmployes(ligue));
 		menu.add(ajouterEmploye(ligue));
 		menu.add(selectionnerEmploye(ligue));
@@ -170,7 +261,7 @@ public class LigueConsole extends JFrame
 
 	private List<Employe> changerAdministrateur(final Ligue ligue)
 	{
-		return new List<>("Convetir employ√© en admin", "f", 
+		return new List<>("Convetir employÈ en admin", "f", 
 				() -> new ArrayList<>(ligue.getEmployes()),
 				(index, element) -> {try {
 					ligue.setAdministrateur(element);
@@ -194,6 +285,58 @@ public class LigueConsole extends JFrame
 			e.printStackTrace();
 		}});
 	}
-}
 	
-		
+	class TableComponent extends DefaultTableCellRenderer{
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rown, int column)
+		{
+			if(value instanceof JButton)
+				return (JButton) value;
+			else
+				return this;
+		}
+	}
+	
+	class BoutonSupprimerLigue extends DefaultCellEditor{
+		protected JButton bouton;
+		private boolean isPushed;
+		private ButtonListener bListener = new ButtonListener();
+		public BoutonSupprimerLigue(JCheckBox checkBox) {
+			super(checkBox);
+			bouton = new JButton();
+			bouton.setOpaque(true);
+			bouton.addActionListener(bListener);
+		}
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			bListener.setRow(row);
+			bListener.setColumn(column);
+			bListener.setTable(table);
+			bouton.setText((value == null) ? "" : value.toString());
+			return bouton;
+		}
+		class ButtonListener implements ActionListener{
+			private int column, row;
+			private JTable table;
+			public void setColumn(int col) {this.column = col;}
+			public void setRow(int row) {this.row = row;}
+			public void setTable(JTable table) {this.table = table;}
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				for(Ligue ligue : gestionPersonnel.getLigues())
+				{
+					if(table.getValueAt(this.row, (this.column - 2)).equals(ligue.getNom()) && ligue != null ) {
+						try {
+							ligue.remove();
+							DefaultTableModel ligneARetirer = (DefaultTableModel) table.getModel();
+							ligneARetirer.removeRow(this.row);
+						} catch (SauvegardeImpossible e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
+	}
+}
