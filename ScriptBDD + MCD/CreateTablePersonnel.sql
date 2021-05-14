@@ -1,31 +1,27 @@
 
 
-CREATE TABLE LIGUE
-(
+DROP TABLE IF EXISTS LIGUE;
+DROP TABLE IF EXISTS EMPLOYE;
+
+CREATE TABLE LIGUE(
    idLigue INT NOT NULL AUTO_INCREMENT,
-   nomLigue VARCHAR(50) NOT NULL,
-   constraint pk_Ligue PRIMARY KEY(idLigue)
-)
-ENGINE=INNODB;
+   nomLigue VARCHAR(50),
+   CONSTRAINT pk_ligue PRIMARY KEY (idLigue)
+)ENGINE = innoDB;
 
-
-
-
-CREATE TABLE EMPLOYE
-(
+CREATE TABLE EMPLOYE(
    idEmploye INT NOT NULL AUTO_INCREMENT,
-   prenom VARCHAR(25) NOT NULL,
-   nom VARCHAR(25) NOT NULL,
-   password VARCHAR(50) NOT NULL,
-   mail VARCHAR(255) NOT NULL,
-   dateDebut DATE NOT NULL,
-   dateFin DATE default NULL,
-   estAdmin boolean default false,
-   estRoot boolean default false, 
-   idLigue int,
-   constraint pk_EMPLOYE PRIMARY KEY(idEmploye)
-)
-ENGINE=INNODB;
+   nomE VARCHAR(50),
+   prenomE VARCHAR(50),
+   DateDebut DATE,
+   DateFin DATE,
+   mailE VARCHAR(50),
+   passwordE VARCHAR(50),
+   estAdmin BOOLEAN DEFAULT false,
+   ligue INT,
+   estRoot BOOLEAN DEFAULT false,
+   CONSTRAINT pk_employe PRIMARY KEY (idEmploye)
+)ENGINE = innoDB;
 
 ALTER TABLE EMPLOYE
-  ADD CONSTRAINT FK_EmpLigue FOREIGN KEY (idLigue) REFERENCES ligue(idLigue);
+  ADD CONSTRAINT FK_EmpLigue FOREIGN KEY (Ligue) REFERENCES ligue(idLigue);
