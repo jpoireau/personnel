@@ -14,16 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/IHM/Logo.jpg</name>
-			<type>1</type>
-			<location>F:/Logo.jpg</location>
-		</link>
-		<link>
-			<name>src/IHM/valider.png</name>
-			<type>1</type>
-			<location>F:/valider.png</location>
-		</link>
-	</linkedResources>
 </projectDescription>

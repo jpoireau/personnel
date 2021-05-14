@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TestAdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IHM.TestAdminController">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -38,7 +38,7 @@
                   <Font name="Calibri Bold" size="15.0" />
                </font>
             </Label>
-            <TableView fx:id="tableauEmploye" fixedCellSize="0.0" onSort="#initializeTableauEmploye" prefHeight="215.0" prefWidth="900.0" stylesheets="@application.css" GridPane.columnSpan="3" GridPane.rowIndex="4">
+            <TableView fx:id="tableauEmploye" fixedCellSize="0.0" onSort="#initializeTableauEmploye" prefHeight="215.0" prefWidth="900.0" GridPane.columnSpan="3" GridPane.rowIndex="4">
               <columns>
                 <TableColumn fx:id="colonneNomEmploye" editable="false" maxWidth="112.5" minWidth="112.5" prefWidth="112.5" resizable="false" sortable="false" text="Nom employé" />
                 <TableColumn fx:id="colonnePrenomEmploye" editable="false" maxWidth="112.5" minWidth="112.5" prefWidth="112.5" resizable="false" sortable="false" text="Prénom employé" />
@@ -53,7 +53,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="tableauLigue" onSort="#initializeTableauLigue" prefHeight="200.0" prefWidth="200.0" stylesheets="@application.css" GridPane.columnSpan="3" GridPane.rowIndex="1">
+            <TableView fx:id="tableauLigue" onSort="#initializeTableauLigue" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
               <columns>
                 <TableColumn fx:id="colonneNomLigue" editable="false" maxWidth="225.0" minWidth="225.0" prefWidth="225.0" resizable="false" sortable="false" text="Nom ligue" />
                 <TableColumn id="buttonVoir" fx:id="colonneVoirLigue" editable="false" maxWidth="225.0" minWidth="225.0" prefWidth="225.0" resizable="false" sortable="false" text="Voir ligue" />

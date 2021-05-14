@@ -47,6 +47,6 @@ public class TestJavaFx extends Application {
             primaryStage.show();
             primaryStage.centerOnScreen();
             primaryStage.setResizable(false);
-            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("Logo.jpg")));
+            //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("Logo.jpg")));
     }
 }
