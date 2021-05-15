@@ -39,7 +39,7 @@
             <TextField fx:id="mail" promptText="Mail :" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Mot de passe :" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <PasswordField fx:id="motDePasse" promptText="mot de passe :" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Button fx:id="confirmer" alignment="CENTER" cache="true" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: GREEN;" text="Confirmer" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+            <Button fx:id="confirmer" alignment="CENTER" cache="true" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="69.0" style="-fx-background-color: INDIGO;" textFill="WHITE" text="Confirmer" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
                <font>
                   <Font name="Calibri" size="12.0" />
                </font>

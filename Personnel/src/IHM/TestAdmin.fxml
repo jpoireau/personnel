@@ -61,9 +61,9 @@
                   <TableColumn id="buttonSupprimer" fx:id="colonneSupprimerLigue" editable="false" maxWidth="225.0" minWidth="225.0" prefWidth="225.0" resizable="false" sortable="false" text="Supprimer ligue" />
               </columns>
             </TableView>
-            <Button fx:id="ajouterLigue" mnemonicParsing="false" onAction="#addLigue" style="-fx-background-color: ORANGE;" text="Ajouter une ligue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-            <Button fx:id="ajouterEmploye" mnemonicParsing="false" onAction="#addEmploye" style="-fx-background-color: ORANGE;" text="Ajouter un employe" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-            <Button fx:id="deconnecter" mnemonicParsing="false" onAction="#disconnect" style="-fx-background-color: RED;" text="Se deconnecter" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+            <Button fx:id="ajouterLigue" mnemonicParsing="false" onAction="#addLigue" style="-fx-background-color: MEDIUMORCHID;" textFill="WHITE" text="Ajouter une ligue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Button fx:id="ajouterEmploye" mnemonicParsing="false" onAction="#addEmploye" style="-fx-background-color: MEDIUMORCHID;" text="Ajouter un employe" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+            <Button fx:id="deconnecter" mnemonicParsing="false" onAction="#disconnect" style="-fx-background-color: INDIGO;" text="Se deconnecter" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
          </children>
       </GridPane>
    </children>
