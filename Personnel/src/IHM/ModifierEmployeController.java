@@ -131,6 +131,6 @@ public class ModifierEmployeController{
 
 	void donnerLigueCreationEmploye(Ligue ligueSelect) {
 		ligueActuelle = ligueSelect;
-		titre.setText("Création employé dans " + ligueSelect.getNom());
+		titre.setText("Création d'un employé dans " + ligueSelect.getNom());
 	}
 }

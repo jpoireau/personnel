@@ -23,7 +23,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Modifier ligue : " GridPane.columnSpan="3" GridPane.halignment="CENTER">
+            <Label text="Ligue : " GridPane.columnSpan="3" GridPane.halignment="CENTER">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
